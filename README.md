@@ -31,7 +31,7 @@ Each layer is self-contained and independently deployable.
          ▲
 ┌────────┴─────────────────────────────────────────┐
 │  L1 — Stress Escalation Predictor                │
-│  XGBoost/LightGBM → ONNX (Empatica E4 wearable) │
+│  XGBoost/LightGBM → ONNX (Empatica E4 wearable)  │
 │  Output: risk_score (0–1) + SHAP cause_tags[]    │
 └──────────────────────────────────────────────────┘
 ```
