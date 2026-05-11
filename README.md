@@ -2,9 +2,9 @@
 
 A three-layer AI system for autistic individuals and their caregivers.
 
-- **L3 — Social Coaching Chatbot** `[COMPLETE]` — persona roleplay with real-time feedback
-- **L2 — Intervention Engine** `[IN PROGRESS]` — YAML rule engine + LLM alert narratives
-- **L1 — Stress Escalation Predictor** `[IN PROGRESS]` — physiological ML → ONNX inference
+- **L3 — Social Coaching Chatbot** — persona roleplay with real-time feedback
+- **L2 — Intervention Engine** — YAML rule engine + LLM alert narratives
+- **L1 — Stress Escalation Predictor** — physiological ML → ONNX inference
 
 Each layer is self-contained and independently deployable.
 
@@ -14,7 +14,7 @@ Each layer is self-contained and independently deployable.
 
 ```
 ┌──────────────────────────────────────────────────┐
-│  L3 — Social Coaching Chatbot  [COMPLETE]        │
+│  L3 — Social Coaching Chatbot                    │
 │  Modular RAG + LangChain LCEL                    │
 │  User ↔ persona roleplay + real-time critic      │
 └──────────────────────────────────────────────────┘
@@ -100,6 +100,7 @@ scripts/        ML pipeline + indexing CLI scripts
 - `docs/specs/L2-INTERVENE.md` — intervention engine spec
 - `docs/specs/L3-COACH.md` — coaching chatbot spec
 - `docs/schemas/db-schema.sql` — Supabase DDL
+- `docs/schemas/db-patch-001.sql` — patch SQL for existing Supabase instances
 
 ---
 
