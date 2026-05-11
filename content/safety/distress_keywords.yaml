@@ -1,0 +1,87 @@
+# /content/safety/distress_keywords.yaml
+# SAFETY CRITICAL — reviewed by: [your name, date]
+# Trigger: any match → immediate exit from roleplay → safe_response screen
+# Logic: case-insensitive substring match on user turn text
+# Never route through LLM. Never log the matched phrase to analytics.
+
+version: 1
+last_reviewed: 2026-04-19
+
+categories:
+
+  self_harm:
+    description: "Direct or indirect references to self-harm"
+    phrases:
+      - "hurt myself"
+      - "hurt myself"
+      - "cut myself"
+      - "cutting myself"
+      - "self harm"
+      - "self-harm"
+      - "self harming"
+      - "burn myself"
+      - "hit myself"
+      - "harm myself"
+      - "injure myself"
+      - "punish myself"
+      - "i deserve to be hurt"
+
+  suicidal_ideation:
+    description: "References to suicide or not wanting to exist"
+    phrases:
+      - "want to die"
+      - "want to be dead"
+      - "kill myself"
+      - "end my life"
+      - "not want to live"
+      - "don't want to be here anymore"
+      - "don't want to exist"
+      - "wish i was dead"
+      - "better off dead"
+      - "better off without me"
+      - "no reason to live"
+      - "no point in living"
+      - "suicide"
+      - "suicidal"
+
+  crisis_overwhelm:
+    description: "Acute distress signals that may indicate crisis state"
+    phrases:
+      - "can't cope"
+      - "cannot cope"
+      - "falling apart"
+      - "can't take it anymore"
+      - "cannot take it anymore"
+      - "everything is too much"
+      - "i give up"
+      - "i can't do this anymore"
+      - "i cannot do this anymore"
+      - "i'm breaking"
+      - "i am breaking"
+      - "i'm falling apart"
+      - "i am falling apart"
+      - "help me please"
+      - "i need help right now"
+      - "nobody cares"
+      - "no one cares about me"
+
+  abuse_disclosure:
+    description: "Disclosures of abuse or unsafe situations"
+    phrases:
+      - "someone is hurting me"
+      - "being abused"
+      - "being hurt by"
+      - "not safe at home"
+      - "afraid of"
+      - "scared of going home"
+      - "someone touches me"
+
+notes:
+  - "This list is a starting point. Add phrases based on real user
+    sessions after launch."
+  - "Err on the side of triggering the safe screen. A false positive
+    (user was expressing frustration in roleplay) is recoverable.
+    A missed crisis signal is not."
+  - "Do not use regex — simple case-insensitive substring match only.
+    Regex introduces edge cases that can silently fail."
+  - "Review this list every 3 months or after any real distress event."

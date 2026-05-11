@@ -1,0 +1,11 @@
+{
+  "ignore": [
+    "node_modules",
+    ".venv",
+    "__pycache__",
+    "ml/data",
+    "ml/models/*.onnx",
+    ".next",
+    "dist"
+  ]
+}

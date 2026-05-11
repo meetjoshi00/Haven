@@ -1,0 +1,175 @@
+# L2 Intervention Engine — rule file
+#
+# Thresholds sourced from ml/models/risk_calibration.json (full)
+# and ml/models/risk_calibration_wearable.json (wearable).
+# Do not hardcode threshold values here — they are populated from those files.
+#
+# Rule matching semantics:
+#   - All rules are evaluated; highest-severity match wins.
+#   - Tie on severity: first rule in file wins.
+#   - cause_tags_any: OR — rule fires if ANY listed tag is in the payload.
+#   - risk_score_gte_full / _wearable: threshold selected by payload.model_type.
+#   - condition.demo: if present, rule only matches when payload.demo == that value.
+#   - demo mode: cooldown_minutes: 0 always; no SMS/email sent regardless of rules.
+
+meta:
+  model_version: "v1.0"
+  calibrated_at: "2026-05-06"
+  thresholds:
+    full:
+      q10: 0.1727
+      q25: 0.3435
+      q50: 0.6506
+      q75: 0.8723
+      q90: 0.9560
+    wearable:
+      q10: 0.2371
+      q25: 0.3615
+      q50: 0.5976
+      q75: 0.8141
+      q90: 0.8835
+
+rules:
+  # ── HIGH severity ──────────────────────────────────────────────────────────
+  - id: full_escalation_urgent
+    condition:
+      risk_score_gte_full: 0.9560
+      risk_score_gte_wearable: 0.8835
+    severity: high
+    headline: "Support may be needed right now"
+    person_message: >-
+      You may be feeling very overwhelmed. Please try to find a quiet spot.
+      Your emergency contact is being notified.
+    caregiver_message: >-
+      High escalation risk. Immediate calm, supportive presence recommended.
+      Do not demand verbal responses.
+    recommended_actions:
+      - "Move to quietest available space immediately"
+      - "Reduce all sensory input"
+      - "Do not demand verbal responses"
+      - "Stay nearby calmly without physical contact unless invited"
+    app_actions:
+      - label: "I'm okay — false alarm"
+        action: "false_alarm"
+      - label: "Noted, thank you"
+        action: "acknowledge"
+    cooldown_minutes: 5
+
+  # ── MEDIUM severity ────────────────────────────────────────────────────────
+  - id: motor_agitation_elevated
+    condition:
+      cause_tags_any: ["motor_agitation"]
+      risk_score_gte_full: 0.3435
+      risk_score_gte_wearable: 0.3615
+    severity: medium
+    headline: "A short break may help"
+    person_message: >-
+      You might be feeling restless. Finding a quieter space or a short
+      movement break could help.
+    caregiver_message: >-
+      Physical agitation detected. A movement break or quieter environment
+      may help.
+    recommended_actions:
+      - "Offer a short movement break"
+      - "Reduce immediate task demands"
+      - "Move to a less crowded space if possible"
+    app_actions:
+      - label: "I'm okay — false alarm"
+        action: "false_alarm"
+      - label: "Noted, thank you"
+        action: "acknowledge"
+    cooldown_minutes: 10
+
+  - id: internal_arousal_sustained
+    condition:
+      cause_tags_any: ["internal_arousal", "escalating_arousal", "sustained_stress"]
+      risk_score_gte_full: 0.3435
+      risk_score_gte_wearable: 0.3615
+    severity: medium
+    headline: "Stress signals detected"
+    person_message: >-
+      Your body may be feeling stressed. Taking a few slow breaths or
+      stepping away briefly might help.
+    caregiver_message: >-
+      Sustained physiological arousal detected. Calm, low-demand check-in
+      recommended.
+    recommended_actions:
+      - "Calm, low-demand check-in"
+      - "Avoid requiring verbal responses right now"
+      - "Suggest slow breathing or a grounding activity"
+    app_actions:
+      - label: "I'm okay — false alarm"
+        action: "false_alarm"
+      - label: "Noted, thank you"
+        action: "acknowledge"
+    cooldown_minutes: 10
+
+  - id: physiological_stress_elevated
+    condition:
+      cause_tags_any: ["physiological_stress", "above_personal_baseline"]
+      risk_score_gte_full: 0.3435
+      risk_score_gte_wearable: 0.3615
+    severity: medium
+    headline: "Above usual stress level"
+    person_message: >-
+      You seem to be above your usual stress level. Giving yourself a moment
+      away might help.
+    caregiver_message: >-
+      Signals are significantly above this person's personal baseline.
+    recommended_actions:
+      - "Check environment for sensory triggers"
+      - "Offer sensory tools if available (headphones, sunglasses)"
+    app_actions:
+      - label: "I'm okay — false alarm"
+        action: "false_alarm"
+      - label: "Noted, thank you"
+        action: "acknowledge"
+    cooldown_minutes: 12
+
+  - id: fatigue_accumulation
+    condition:
+      cause_tags_any: ["fatigue_accumulation"]
+      risk_score_gte_full: 0.3435
+      risk_score_gte_wearable: 0.3615
+    severity: medium
+    headline: "Fatigue may be building"
+    person_message: >-
+      You have been going for a while. A short rest or change of activity
+      might help you recharge.
+    caregiver_message: >-
+      Session elapsed ratio indicates extended exposure. Consider offering
+      a rest break or transitioning to a lower-demand activity.
+    recommended_actions:
+      - "Offer a rest break"
+      - "Transition to a lower-demand activity"
+      - "Check if hydration or a snack is needed"
+    app_actions:
+      - label: "I'm okay — false alarm"
+        action: "false_alarm"
+      - label: "Noted, thank you"
+        action: "acknowledge"
+    cooldown_minutes: 15
+
+  # ── DEMO catch-all (always last) ──────────────────────────────────────────
+  - id: demo_mode
+    condition:
+      demo: true
+      risk_score_gte_full: 0.3435
+      risk_score_gte_wearable: 0.3615
+    severity: medium
+    headline: "Demo — stress escalation signal detected"
+    person_message: >-
+      Demo mode: stress escalation signals are elevated in this simulation.
+    caregiver_message: >-
+      Demo mode: physiological signals indicate stress escalation.
+      In a real scenario, follow the recommended actions below.
+    recommended_actions:
+      - "This is a demonstration alert"
+      - "In a real scenario, offer a movement break or quiet space"
+      - "Check in calmly without demanding a verbal response"
+    app_actions:
+      - label: "I'm okay — false alarm"
+        action: "false_alarm"
+      - label: "Noted, thank you"
+        action: "acknowledge"
+    cooldown_minutes: 0

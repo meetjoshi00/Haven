@@ -1,0 +1,28 @@
+{
+  "version": "v1.0",
+  "features": [
+    {"name": "gsr_phasic_peak_count",        "dtype": "float32", "inference_excluded": false, "source": "gsr_phasic",                   "shap_cause_tag": "internal_arousal"},
+    {"name": "gsr_phasic_peak_freq",          "dtype": "float32", "inference_excluded": false, "source": "gsr_phasic",                   "shap_cause_tag": "sustained_stress"},
+    {"name": "gsr_tonic_mean",                "dtype": "float32", "inference_excluded": false, "source": "gsr_tonic",                    "shap_cause_tag": null},
+    {"name": "gsr_tonic_slope",               "dtype": "float32", "inference_excluded": false, "source": "gsr_tonic",                    "shap_cause_tag": "escalating_arousal"},
+    {"name": "subject_norm_gsr_z",            "dtype": "float32", "inference_excluded": false, "source": "gsr_us",                       "shap_cause_tag": "above_personal_baseline"},
+    {"name": "skin_temp_mean",                "dtype": "float32", "inference_excluded": false, "source": "skin_temp_c",                  "shap_cause_tag": null},
+    {"name": "skin_temp_derivative",          "dtype": "float32", "inference_excluded": false, "source": "skin_temp_c",                  "shap_cause_tag": "physiological_stress"},
+    {"name": "subject_norm_st_z",             "dtype": "float32", "inference_excluded": false, "source": "skin_temp_c",                  "shap_cause_tag": null},
+    {"name": "acc_svm_mean",                  "dtype": "float32", "inference_excluded": false, "source": "acc_svm",                      "shap_cause_tag": "motor_agitation"},
+    {"name": "acc_svm_std",                   "dtype": "float32", "inference_excluded": false, "source": "acc_svm",                      "shap_cause_tag": null},
+    {"name": "acc_svm_max",                   "dtype": "float32", "inference_excluded": false, "source": "acc_svm",                      "shap_cause_tag": null},
+    {"name": "acc_svm_above_threshold_ratio", "dtype": "float32", "inference_excluded": false, "source": "acc_svm",                      "shap_cause_tag": "motor_agitation"},
+    {"name": "condition_lpe",                 "dtype": "int8",    "inference_excluded": false, "source": "condition",                    "shap_cause_tag": null},
+    {"name": "condition_hpe",                 "dtype": "int8",    "inference_excluded": false, "source": "condition",                    "shap_cause_tag": null},
+    {"name": "session_elapsed_ratio",         "dtype": "float32", "inference_excluded": false, "source": "meta.total_session_duration_s","shap_cause_tag": "fatigue_accumulation"},
+    {"name": "gaze_off_task_ratio",           "dtype": "float32", "inference_excluded": true,  "source": "gaze",                         "shap_cause_tag": null},
+    {"name": "performance_failure_rate",      "dtype": "float32", "inference_excluded": true,  "source": "performance",                  "shap_cause_tag": null},
+    {"name": "engagement_class_mode",         "dtype": "int8",    "inference_excluded": true,  "source": "engagement",                   "shap_cause_tag": null}
+  ],
+  "thresholds": {
+    "eda_amplitude_min_us": 0.01,
+    "acc_svm_above_threshold": 150,
+    "st_null_below_c": 20.0
+  }
+}

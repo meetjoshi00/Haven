@@ -1,0 +1,38 @@
+# L1 pipeline hyperparameters
+# All data-derived values confirmed via full population inspection (38 LPE/HPE participants).
+# Never hardcode these values in pipeline code — always read from here.
+
+window_size_s: 30
+stride_s: 10
+lookahead_s: 30
+
+# Motion artifact gating (Kleckner 2018)
+# Threshold is per-sample Acc_SVM value; window-mean approach fires 0% so not used.
+acc_svm_artifact_threshold: 150      # per-sample (~2.3g); window ratio approach required
+acc_svm_artifact_ratio: 0.20         # >20% of 32Hz window samples above threshold → null GSR
+
+# EDA decomposition (NeuroKit2 cvxEDA)
+# Half the NK2 default (0.02) — ASD children have lower electrodermal conductance.
+eda_amplitude_min: 0.01              # μS
+
+# Skin temperature sentinel
+# P55 has -273.15°C readings (absolute zero artifact). 20°C is below physiological range.
+st_null_below_c: 20.0
+
+# P29 LPE SGTime corruption detection
+# Span > 10,000s indicates Unix epoch leak in GSR SGTime column.
+# Fix: SGTime = UnixTime - UnixTime.min(). Applies to GSR only (ST/ACC unaffected).
+sgtime_corrupt_threshold_s: 10000
+
+# Dataset native sampling rates (Hz) — Empatica E4 hardware constants
+gsr_sampling_rate_hz: 4
+acc_sampling_rate_hz: 32
+
+# Training
+cv_folds: 5
+ensemble_auroc_threshold: 0.80
+shap_top_n: 2
+
+# Versioning
+feature_schema_version: "v1.0"
+model_version: "v1.0"

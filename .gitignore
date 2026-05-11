@@ -1,0 +1,58 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+.env.test
+.env.staging
+
+# ML — large artifacts
+ml/data/
+ml/experiments/
+ml/models/*
+!ml/models/feature_schema.json
+!ml/models/population_baseline.json
+!ml/models/risk_calibration.json
+!ml/models/risk_calibration_wearable.json
+!ml/models/model_full_coef.json
+!ml/models/model_wearable_coef.json
+
+# Node
+node_modules/
+.next/
+out/
+.vercel/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Claude Code — local overrides only, not project settings
+.claude/settings.local.json
+
+# Claude Code — dev context files (not project deliverables)
+NOTES.md
+PROJECT_SUMMARY.md
+
+# Python dev artifacts
+.pytest_cache/
+*.pdb
+.coverage
+htmlcov/
+
+# Misc
+*.log
+*.sqlite

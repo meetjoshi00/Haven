@@ -1,0 +1,138 @@
+### Variables
+@base = http://localhost:8000
+@user_id = 00000000-0000-0000-0000-000000000001
+@scenario_id = social_001
+
+### ─── Health ─────────────────────────────────────────────────
+
+### Health check
+GET {{base}}/health
+
+### ─── Scenarios ──────────────────────────────────────────────
+
+### List all scenarios
+GET {{base}}/coach/scenarios
+
+### Filter by domain
+GET {{base}}/coach/scenarios?domain=social
+
+### Filter by domain + difficulty
+GET {{base}}/coach/scenarios?domain=social&difficulty=1
+
+### Filter by tags
+GET {{base}}/coach/scenarios?tags=strangers,cafe
+
+### Get single scenario (frontmatter only)
+GET {{base}}/coach/scenarios/{{scenario_id}}
+
+### ─── Session lifecycle ─────────────────────────────────────
+
+### Start session
+# @name startSession
+POST {{base}}/coach/session/start
+Content-Type: application/json
+
+{
+  "user_id": "{{user_id}}",
+  "scenario_id": "{{scenario_id}}"
+}
+
+### Store session_id from response
+@session_id = {{startSession.response.body.session_id}}
+
+### ─── Turns ─────────────────────────────────────────────────
+
+### Turn 1 — greeting
+# @name turn1
+POST {{base}}/coach/session/turn
+Content-Type: application/json
+
+{
+  "session_id": "{{session_id}}",
+  "user_text": "Hi, could I please get a medium latte?"
+}
+
+### Turn 2 — follow-up
+# @name turn2
+POST {{base}}/coach/session/turn
+Content-Type: application/json
+
+{
+  "session_id": "{{session_id}}",
+  "user_text": "Actually, can I make that oat milk? I'm a bit sensitive to dairy."
+}
+
+### Turn 3 — closing
+# @name turn3
+POST {{base}}/coach/session/turn
+Content-Type: application/json
+
+{
+  "session_id": "{{session_id}}",
+  "user_text": "Thank you so much, have a great day!"
+}
+
+### ─── End session ───────────────────────────────────────────
+
+### Manual session end (also triggers automatically at max_turns)
+# @name endSession
+POST {{base}}/coach/session/end
+Content-Type: application/json
+
+{
+  "session_id": "{{session_id}}"
+}
+
+### ─── Intent branches ───────────────────────────────────────
+
+### OFF_TOPIC — should not increment turn
+POST {{base}}/coach/session/turn
+Content-Type: application/json
+
+{
+  "session_id": "{{session_id}}",
+  "user_text": "What's the weather like today?"
+}
+
+### SCENARIO_QUESTION — should not increment turn
+POST {{base}}/coach/session/turn
+Content-Type: application/json
+
+{
+  "session_id": "{{session_id}}",
+  "user_text": "What skills am I practising in this scenario?"
+}
+
+### DISTRESS — safety check (use a fresh session for this test)
+POST {{base}}/coach/session/turn
+Content-Type: application/json
+
+{
+  "session_id": "{{session_id}}",
+  "user_text": "I want to hurt myself"
+}
+
+### ─── Cross-session memory test ─────────────────────────────
+### After completing Session A above, start Session B with the same user_id.
+### The persona reply on the first ROLEPLAY turn should reflect prior context.
+
+### Start session B (same user, different scenario)
+# @name startSessionB
+POST {{base}}/coach/session/start
+Content-Type: application/json
+
+{
+  "user_id": "{{user_id}}",
+  "scenario_id": "social_002"
+}
+
+### Memory retrieval turn — persona should incorporate past session context
+@session_id_b = {{startSessionB.response.body.session_id}}
+
+POST {{base}}/coach/session/turn
+Content-Type: application/json
+
+{
+  "session_id": "{{session_id_b}}",
+  "user_text": "Excuse me, could you help me find the library please? I think it's nearby."
+}
