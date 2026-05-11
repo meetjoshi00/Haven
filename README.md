@@ -77,6 +77,18 @@ See `SETUP.md` for full environment setup including Supabase, Vercel, and Window
 
 ---
 
+## Data
+
+L1 and L2 use the **Engagnition dataset** (Kim et al. 2024) for training and threshold calibration.  
+L3 (social coaching) does not use this dataset — it uses git-versioned Markdown content in `/content/`.
+
+**Dataset:** Engagnition — Kim et al. (2024), *Scientific Data*  
+**DOI:** 10.1038/s41597-024-03132-3  
+**Details:** 57 participants, Empatica E4 wearable (EDA, BVP, ST, ACC)  
+**Raw data:** Not included in this repo — download separately and place in `ml/data/raw/`
+
+---
+
 ## Project Structure
 
 ```
