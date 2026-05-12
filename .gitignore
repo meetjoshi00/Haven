@@ -56,3 +56,4 @@ htmlcov/
 # Misc
 *.log
 *.sqlite
+docs/write-ups/*.html
